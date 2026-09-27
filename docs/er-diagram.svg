@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 900" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="er-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3568d4"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1300" height="900" fill="#ffffff"/>
+  <text x="650" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a2332">okDriver Platform — Entity-Relationship Diagram</text>
+  <text x="650" y="56" text-anchor="middle" font-size="12" fill="#6b7690">Six core tables. Full column list and constraints: backend/app/models.py and alembic/versions/*_initial_schema.py</text>
+
+  <!-- helper style: each table is a header rect + body rect + field rows -->
+
+  <!-- USERS -->
+  <g>
+    <rect x="50" y="90" width="250" height="150" rx="6" fill="#ffffff" stroke="#3568d4" stroke-width="1.5"/>
+    <rect x="50" y="90" width="250" height="30" rx="6" fill="#3568d4"/>
+    <text x="175" y="110" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">users</text>
+    <text x="65" y="140" font-size="12" fill="#1a2332">PK  id (uuid)</text>
+    <text x="65" y="160" font-size="12" fill="#1a2332">     username, email, role</text>
+    <text x="65" y="180" font-size="12" fill="#1a2332">     hashed_password</text>
+    <text x="65" y="200" font-size="12" fill="#1a2332">     is_active, created_at</text>
+    <text x="65" y="222" font-size="11" fill="#6b7690">role: admin | operator</text>
+  </g>
+
+  <!-- CAMERAS -->
+  <g>
+    <rect x="380" y="90" width="280" height="210" rx="6" fill="#ffffff" stroke="#1fb35a" stroke-width="1.5"/>
+    <rect x="380" y="90" width="280" height="30" rx="6" fill="#1fb35a"/>
+    <text x="520" y="110" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">cameras</text>
+    <text x="395" y="140" font-size="12" fill="#1a2332">PK  id (e.g. "C001")</text>
+    <text x="395" y="160" font-size="12" fill="#1a2332">     name, department, zone</text>
+    <text x="395" y="180" font-size="12" fill="#1a2332">     latitude, longitude</text>
+    <text x="395" y="200" font-size="12" fill="#1a2332">     source_protocol, stream_ref_encrypted</text>
+    <text x="395" y="220" font-size="12" fill="#1a2332">     status, last_heartbeat</text>
+    <text x="395" y="240" font-size="12" fill="#1a2332">     storage_tier, retention_days</text>
+    <text x="395" y="260" font-size="12" fill="#1a2332">FK  created_by → users.id</text>
+    <text x="395" y="282" font-size="11" fill="#6b7690">status: online | degraded | offline</text>
+  </g>
+
+  <!-- WATCHLIST -->
+  <g>
+    <rect x="740" y="90" width="290" height="190" rx="6" fill="#ffffff" stroke="#d64545" stroke-width="1.5"/>
+    <rect x="740" y="90" width="290" height="30" rx="6" fill="#d64545"/>
+    <text x="885" y="110" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">watchlist_entries</text>
+    <text x="755" y="140" font-size="12" fill="#1a2332">PK  id (uuid)</text>
+    <text x="755" y="160" font-size="12" fill="#1a2332">     category, identifier_type</text>
+    <text x="755" y="180" font-size="12" fill="#1a2332">     identifier_value (indexed)</text>
+    <text x="755" y="200" font-size="12" fill="#1a2332">     label, description, risk_level</text>
+    <text x="755" y="220" font-size="12" fill="#1a2332">     is_active</text>
+    <text x="755" y="240" font-size="12" fill="#1a2332">FK  created_by → users.id</text>
+    <text x="755" y="262" font-size="11" fill="#6b7690">category: stolen/blacklisted vehicle,</text>
+    <text x="755" y="277" font-size="11" fill="#6b7690">wanted/missing person, other</text>
+  </g>
+
+  <!-- AUDIT LOGS -->
+  <g>
+    <rect x="1080" y="90" width="180" height="170" rx="6" fill="#ffffff" stroke="#8a5cc7" stroke-width="1.5"/>
+    <rect x="1080" y="90" width="180" height="30" rx="6" fill="#8a5cc7"/>
+    <text x="1170" y="110" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">audit_logs</text>
+    <text x="1095" y="140" font-size="12" fill="#1a2332">PK  id (uuid)</text>
+    <text x="1095" y="160" font-size="12" fill="#1a2332">     action, entity_type</text>
+    <text x="1095" y="180" font-size="12" fill="#1a2332">     entity_id, details (json)</text>
+    <text x="1095" y="200" font-size="12" fill="#1a2332">FK  actor_id → users.id</text>
+    <text x="1095" y="220" font-size="12" fill="#1a2332">     ip_address, created_at</text>
+    <text x="1095" y="242" font-size="11" fill="#6b7690">written on every create/update/</text>
+    <text x="1095" y="257" font-size="11" fill="#6b7690">disable/ack/resolve action</text>
+  </g>
+
+  <!-- DETECTION EVENTS -->
+  <g>
+    <rect x="380" y="380" width="320" height="210" rx="6" fill="#ffffff" stroke="#e08a2e" stroke-width="1.5"/>
+    <rect x="380" y="380" width="320" height="30" rx="6" fill="#e08a2e"/>
+    <text x="540" y="400" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">detection_events</text>
+    <text x="395" y="430" font-size="12" fill="#1a2332">PK  id (uuid)</text>
+    <text x="395" y="450" font-size="12" fill="#1a2332">FK  camera_id → cameras.id</text>
+    <text x="395" y="470" font-size="12" fill="#1a2332">     event_type, timestamp (indexed)</text>
+    <text x="395" y="490" font-size="12" fill="#1a2332">     vehicle_number (indexed), vehicle_type</text>
+    <text x="395" y="510" font-size="12" fill="#1a2332">     person_ref, confidence, bounding_box</text>
+    <text x="395" y="530" font-size="12" fill="#1a2332">     source, dedup_hash (indexed)</text>
+    <text x="395" y="550" font-size="12" fill="#1a2332">     raw_payload (json)</text>
+    <text x="395" y="572" font-size="11" fill="#6b7690">composite index (camera_id, timestamp)</text>
+    <text x="395" y="586" font-size="11" fill="#6b7690">composite index (vehicle_number, timestamp)</text>
+  </g>
+
+  <!-- ALERTS -->
+  <g>
+    <rect x="380" y="640" width="340" height="230" rx="6" fill="#ffffff" stroke="#c0392b" stroke-width="1.5"/>
+    <rect x="380" y="640" width="340" height="30" rx="6" fill="#c0392b"/>
+    <text x="550" y="660" text-anchor="middle" fill="#ffffff" font-weight="700" font-size="13">alerts</text>
+    <text x="395" y="690" font-size="12" fill="#1a2332">PK  id (uuid)</text>
+    <text x="395" y="710" font-size="12" fill="#1a2332">FK  event_id → detection_events.id</text>
+    <text x="395" y="730" font-size="12" fill="#1a2332">FK  camera_id → cameras.id</text>
+    <text x="395" y="750" font-size="12" fill="#1a2332">FK  watchlist_id → watchlist_entries.id</text>
+    <text x="395" y="770" font-size="12" fill="#1a2332">     matched_identifier, alert_type</text>
+    <text x="395" y="790" font-size="12" fill="#1a2332">     severity, status (indexed), confidence</text>
+    <text x="395" y="810" font-size="12" fill="#1a2332">     latitude, longitude, notes</text>
+    <text x="395" y="830" font-size="12" fill="#1a2332">FK  acknowledged_by / resolved_by → users.id</text>
+    <text x="395" y="852" font-size="11" fill="#6b7690">status: new | acknowledged | resolved</text>
+  </g>
+
+  <!-- relationships -->
+  <path d="M 175 240 C 175 320, 250 260, 380 200" fill="none" stroke="#3568d4" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+  <path d="M 300 120 C 520 70, 620 70, 740 180" fill="none" stroke="#3568d4" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+  <path d="M 175 240 C 175 340, 900 340, 1170 260" fill="none" stroke="#3568d4" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+  <path d="M 175 240 C 100 500, 300 650, 380 720" fill="none" stroke="#3568d4" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+
+  <line x1="520" y1="300" x2="530" y2="380" stroke="#1fb35a" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+  <path d="M 520 300 C 480 480, 460 600, 470 640" fill="none" stroke="#1fb35a" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+
+  <path d="M 850 280 C 780 450, 700 600, 660 640" fill="none" stroke="#d64545" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+
+  <line x1="540" y1="590" x2="540" y2="640" stroke="#e08a2e" stroke-width="1.3" marker-end="url(#er-arrow)"/>
+
+  <text x="1010" y="480" font-size="12" fill="#41506b" font-style="italic">Blue lines: foreign keys referencing users.id</text>
+  <text x="1010" y="500" font-size="12" fill="#41506b" font-style="italic">Green: cameras → events / alerts</text>
+  <text x="1010" y="520" font-size="12" fill="#41506b" font-style="italic">Red: watchlist → alerts</text>
+  <text x="1010" y="540" font-size="12" fill="#41506b" font-style="italic">Orange: events → alerts</text>
+</svg>

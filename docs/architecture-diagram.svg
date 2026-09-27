@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 1000" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2c3e50"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3568d4"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#e08a2e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1300" height="1000" fill="#ffffff"/>
+  <text x="650" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a2332">okDriver CCTV Monitoring, Analytics &amp; Alert Platform — Architecture</text>
+
+  <!-- Layer A: Sources -->
+  <g font-size="13">
+    <rect x="30" y="60" width="270" height="80" rx="8" fill="#e8f0fe" stroke="#3568d4" stroke-width="1.5"/>
+    <text x="165" y="92" text-anchor="middle" font-weight="600" fill="#1a2332">Simulator adapter</text>
+    <text x="165" y="112" text-anchor="middle" fill="#41506b">Cameras C001, C003</text>
+    <text x="165" y="128" text-anchor="middle" fill="#41506b" font-size="11">procedural junction scene</text>
+
+    <rect x="330" y="60" width="270" height="80" rx="8" fill="#e8f0fe" stroke="#3568d4" stroke-width="1.5"/>
+    <text x="465" y="92" text-anchor="middle" font-weight="600" fill="#1a2332">Recorded-file adapter</text>
+    <text x="465" y="112" text-anchor="middle" fill="#41506b">Camera C002</text>
+    <text x="465" y="128" text-anchor="middle" fill="#41506b" font-size="11">looped sample clip (OpenCV)</text>
+
+    <rect x="630" y="60" width="300" height="80" rx="8" fill="#e8f0fe" stroke="#3568d4" stroke-width="1.5"/>
+    <text x="780" y="92" text-anchor="middle" font-weight="600" fill="#1a2332">RTSP / ONVIF adapter</text>
+    <text x="780" y="112" text-anchor="middle" fill="#41506b">Camera C005 + real devices</text>
+    <text x="780" y="128" text-anchor="middle" fill="#41506b" font-size="11">FFmpeg backend, ONVIF discovery stub</text>
+
+    <rect x="970" y="60" width="300" height="80" rx="8" fill="#fdf1e7" stroke="#e08a2e" stroke-width="1.5"/>
+    <text x="1120" y="92" text-anchor="middle" font-weight="600" fill="#1a2332">AI analytics service</text>
+    <text x="1120" y="112" text-anchor="middle" fill="#41506b">ANPR / vehicle / person / object</text>
+    <text x="1120" y="128" text-anchor="middle" fill="#41506b" font-size="11">built-in simulator today; swappable</text>
+  </g>
+
+  <!-- Layer B: adapter layer + ingest -->
+  <rect x="30" y="180" width="900" height="60" rx="8" fill="#f3f6fb" stroke="#8ca0c4" stroke-width="1.5"/>
+  <text x="480" y="205" text-anchor="middle" font-size="13" font-weight="600" fill="#1a2332">Video adapter layer — common interface: frames() / health_check()</text>
+  <text x="480" y="223" text-anchor="middle" font-size="11" fill="#41506b">one registry maps camera.source_protocol → adapter class (registry.py)</text>
+
+  <rect x="970" y="180" width="300" height="60" rx="8" fill="#fdf1e7" stroke="#e08a2e" stroke-width="1.5"/>
+  <text x="1120" y="205" text-anchor="middle" font-size="13" font-weight="600" fill="#1a2332">POST /api/v1/events/ingest</text>
+  <text x="1120" y="223" text-anchor="middle" font-size="11" fill="#41506b">same path used by the simulator</text>
+
+  <!-- arrows A -> B -->
+  <line x1="165" y1="140" x2="300" y2="180" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="465" y1="140" x2="465" y2="180" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="780" y1="140" x2="650" y2="180" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1120" y1="140" x2="1120" y2="180" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer C: Backend -->
+  <rect x="30" y="270" width="1240" height="260" rx="10" fill="#0f1420" stroke="#0f1420"/>
+  <text x="650" y="298" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">FastAPI Backend (single service, horizontally replicable)</text>
+
+  <g font-size="12">
+    <rect x="55" y="315" width="280" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="195" y="338" text-anchor="middle" fill="#ffffff" font-weight="600">Auth &amp; RBAC</text>
+    <text x="195" y="356" text-anchor="middle" fill="#a9b6d2" font-size="11">JWT, bcrypt, admin/operator</text>
+
+    <rect x="355" y="315" width="280" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="495" y="338" text-anchor="middle" fill="#ffffff" font-weight="600">Camera registry</text>
+    <text x="495" y="356" text-anchor="middle" fill="#a9b6d2" font-size="11">CRUD, search, Fernet-encrypted stream refs</text>
+
+    <rect x="655" y="315" width="280" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="795" y="338" text-anchor="middle" fill="#ffffff" font-weight="600">Ingest + dedup + watchlist match</text>
+    <text x="795" y="356" text-anchor="middle" fill="#a9b6d2" font-size="11">services/ingest.py — single code path</text>
+
+    <rect x="955" y="315" width="290" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="1100" y="338" text-anchor="middle" fill="#ffffff" font-weight="600">Alerts API</text>
+    <text x="1100" y="356" text-anchor="middle" fill="#a9b6d2" font-size="11">severity, acknowledge / resolve</text>
+
+    <rect x="55" y="390" width="280" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="195" y="413" text-anchor="middle" fill="#ffffff" font-weight="600">Vehicle / entity trace</text>
+    <text x="195" y="431" text-anchor="middle" fill="#a9b6d2" font-size="11">cross-camera search, movement history</text>
+
+    <rect x="355" y="390" width="280" height="60" rx="6" fill="#1c2740" stroke="#3568d4"/>
+    <text x="495" y="413" text-anchor="middle" fill="#ffffff" font-weight="600">Stats &amp; audit log</text>
+    <text x="495" y="431" text-anchor="middle" fill="#a9b6d2" font-size="11">dashboard summary, action trail</text>
+
+    <rect x="655" y="390" width="280" height="60" rx="6" fill="#1c2740" stroke="#e08a2e"/>
+    <text x="795" y="413" text-anchor="middle" fill="#ffffff" font-weight="600">MJPEG stream relay</text>
+    <text x="795" y="431" text-anchor="middle" fill="#a9b6d2" font-size="11">GET /cameras/{id}/stream</text>
+
+    <rect x="955" y="390" width="290" height="60" rx="6" fill="#1c2740" stroke="#e08a2e"/>
+    <text x="1100" y="413" text-anchor="middle" fill="#ffffff" font-weight="600">WebSocket hub</text>
+    <text x="1100" y="431" text-anchor="middle" fill="#a9b6d2" font-size="11">event.new / alert.new / camera.status</text>
+
+    <rect x="355" y="465" width="280" height="50" rx="6" fill="#26314d" stroke="#5a6b8c"/>
+    <text x="495" y="486" text-anchor="middle" fill="#dfe6f5" font-weight="600" font-size="11">Heartbeat service (background)</text>
+    <text x="495" y="502" text-anchor="middle" fill="#a9b6d2" font-size="10">probes every adapter every 8s</text>
+
+    <rect x="655" y="465" width="280" height="50" rx="6" fill="#26314d" stroke="#5a6b8c"/>
+    <text x="795" y="486" text-anchor="middle" fill="#dfe6f5" font-weight="600" font-size="11">Analytics simulator (background)</text>
+    <text x="795" y="502" text-anchor="middle" fill="#a9b6d2" font-size="10">stand-in for a real CV pipeline</text>
+  </g>
+
+  <!-- arrows B -> C -->
+  <line x1="480" y1="240" x2="480" y2="270" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="1120" y1="240" x2="1120" y2="270" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer D: data stores, tucked under the two outer backend columns -->
+  <rect x="55" y="560" width="300" height="75" rx="8" fill="#eef7ee" stroke="#1fb35a" stroke-width="1.5"/>
+  <text x="205" y="588" text-anchor="middle" font-weight="600" fill="#1a2332" font-size="13">PostgreSQL (RDS-compatible)</text>
+  <text x="205" y="606" text-anchor="middle" fill="#41506b" font-size="11">cameras, events, watchlist, alerts, audit</text>
+  <text x="205" y="621" text-anchor="middle" fill="#41506b" font-size="11">SQLAlchemy models + Alembic migrations</text>
+
+  <rect x="945" y="560" width="300" height="75" rx="8" fill="#fdeeee" stroke="#d64545" stroke-width="1.5"/>
+  <text x="1095" y="588" text-anchor="middle" font-weight="600" fill="#1a2332" font-size="13">Redis Pub/Sub (optional)</text>
+  <text x="1095" y="606" text-anchor="middle" fill="#41506b" font-size="11">fans real-time events out across</text>
+  <text x="1095" y="621" text-anchor="middle" fill="#41506b" font-size="11">horizontally-scaled backend replicas</text>
+
+  <line x1="195" y1="530" x2="195" y2="560" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  <line x1="1100" y1="530" x2="1100" y2="560" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+
+  <!-- Layer E: dashboard, full width, connected straight down the free centre column -->
+  <rect x="30" y="700" width="1240" height="150" rx="10" fill="#f3f6fb" stroke="#3568d4" stroke-width="1.5"/>
+  <text x="650" y="726" text-anchor="middle" font-size="14" font-weight="700" fill="#1a2332">React operator dashboard (Vite, Leaflet)</text>
+
+  <g font-size="11">
+    <rect x="55" y="740" width="280" height="50" rx="6" fill="#ffffff" stroke="#8ca0c4"/>
+    <text x="195" y="770" text-anchor="middle" fill="#1a2332">Live map + camera markers</text>
+
+    <rect x="355" y="740" width="280" height="50" rx="6" fill="#ffffff" stroke="#8ca0c4"/>
+    <text x="495" y="770" text-anchor="middle" fill="#1a2332">Live / near-live camera grid</text>
+
+    <rect x="655" y="740" width="280" height="50" rx="6" fill="#ffffff" stroke="#8ca0c4"/>
+    <text x="795" y="770" text-anchor="middle" fill="#1a2332">Alerts, watchlist &amp; audit</text>
+
+    <rect x="955" y="740" width="290" height="50" rx="6" fill="#ffffff" stroke="#8ca0c4"/>
+    <text x="1100" y="770" text-anchor="middle" fill="#1a2332">Vehicle trace &amp; movement history</text>
+  </g>
+
+  <!-- straight arrows from backend bottom to dashboard top: REST, WebSocket, MJPEG -->
+  <line x1="440" y1="530" x2="440" y2="700" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  <text x="452" y="618" font-size="11" fill="#2c3e50">REST</text>
+
+  <line x1="650" y1="530" x2="650" y2="700" stroke="#e08a2e" stroke-width="1.5" stroke-dasharray="2 4" marker-end="url(#arrowOrange)"/>
+  <text x="662" y="618" font-size="11" fill="#e08a2e">MJPEG (&lt;img&gt;)</text>
+
+  <line x1="850" y1="530" x2="850" y2="700" stroke="#3568d4" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowBlue)"/>
+  <text x="862" y="618" font-size="11" fill="#3568d4">WebSocket (live push)</text>
+
+  <!-- Layer F: operator -->
+  <circle cx="650" cy="900" r="18" fill="#1a2332"/>
+  <circle cx="650" cy="894" r="6" fill="#ffffff"/>
+  <path d="M 636 911 a 14 12 0 0 1 28 0 z" fill="#ffffff"/>
+  <text x="650" y="935" text-anchor="middle" font-size="12" fill="#1a2332">Traffic police operator / admin (browser)</text>
+  <line x1="650" y1="850" x2="650" y2="880" stroke="#2c3e50" stroke-width="1.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+</svg>

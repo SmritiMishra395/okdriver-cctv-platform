@@ -1,10 +1,3 @@
-"""Populates the camera registry and watchlist with representative demo data.
-
-Idempotent: safe to run against an already-seeded database. Run with
-`python -m scripts.seed` from the backend/ directory after the schema
-has been created (the API creates it automatically on first startup).
-"""
-
 import sys
 from pathlib import Path
 

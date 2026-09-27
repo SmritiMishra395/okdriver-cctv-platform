@@ -1,13 +1,3 @@
-"""Generates a short, synthetic "RTO checkpoint" clip used by camera C002.
-
-No real CCTV footage is bundled with this submission (none was available
-that was clearly licensed for redistribution). Instead this produces a
-procedurally generated clip via FFmpeg's `lavfi` test sources, so the
-video-file adapter (`app/video/file_adapter.py`) has a genuine recorded
-file to loop rather than pointing at nothing. Run once:
-
-    python scripts/generate_sample_video.py
-"""
 
 import subprocess
 import sys
